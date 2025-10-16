@@ -20,11 +20,17 @@ testFrame = pd.DataFrame(
 )
 print(testFrame[0])
 
-tensor = tf.constant([0.0, 1, 1])
-print(tf.nn.softmax(tensor))
-print(tensor)
-print(tf.size(tensor))
-constant = tf.constant([2.0])
-print(tensor * constant)
-print(constant.shape)
-print(tf.size(constant))
+tensor = tf.constant([[0.0, 0.1, 0.2, 0.3], [0, 1, 2, 3]])
+print(tensor[0, 1])
+print(tensor[0][1]) # same
+# testList = [[0.0, 0.1, 0.2, 0.3], [0, 1, 2, 3]]
+# print(testList[0][0:3:2])
+# print(testList[0, 1]) not allowed with regular lists, only with tensors
+
+print(tf.reshape(tensor, (4, 2)))
+print(tf.reshape(tensor, (2, 2, 2)))
+print(tensor.numpy())
+
+ragged = tf.ragged.constant([[[1, 1], [1]], [[1, 1, 1, 1, 1]]]) # ragged tensors can be created with incomplete arrays before the final level
+print(ragged.numpy())
+print(tf.constant([[[1, 1], [1, 1]], [[1, 1], [1, 1]]])) # regular tensors and ragged tensors are stored completely differently, or at least converted into np arrays completely differently
