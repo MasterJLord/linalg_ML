@@ -1,5 +1,6 @@
-import numpy as np
+import tensorflow as tf
 import pandas as pd
+import numpy as np
 
 testArray = np.array([["1"], np.array([1])])
 print(testArray)
@@ -18,3 +19,12 @@ testFrame = pd.DataFrame(
     data = storage
 )
 print(testFrame[0])
+
+tensor = tf.constant([0.0, 1, 1])
+print(tf.nn.softmax(tensor))
+print(tensor)
+print(tf.size(tensor))
+constant = tf.constant([2.0])
+print(tensor * constant)
+print(constant.shape)
+print(tf.size(constant))
