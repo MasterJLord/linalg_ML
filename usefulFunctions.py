@@ -1,0 +1,70 @@
+import math
+import numpy as np
+import pandas as pd
+
+def L1LossFunction(target : float, output : float):
+    return math.abs(target-output)
+
+def L2LossFunction(target : float, output : float):
+    return (target - output)**2
+
+def LinearActivation(input : float):
+    return input
+
+def LinearPrime(input : float):
+    return 1
+
+def ReLUActivation(input : float):
+    if (input >= 0):
+        return input
+    else:
+        return 0
+    
+def ReLUPrime(input : float):
+    if (input >= 0):
+        return 1
+    else:
+        return 0
+    
+def LeakyReLUActivation(input : float):
+    if (input >= 0):
+        return input
+    else:
+        return input/10
+    
+def LeakyReLUPrime(input : float):
+    if (input >= 0):
+        return 1
+    else:
+        return 0.1
+
+
+LOSS_FUNCTION_CODES = \
+{
+    '1': L1LossFunction,
+    '2': L2LossFunction
+}
+
+ACTIVATION_FUNCTION_CODES = \
+{
+    '1': LinearActivation,
+    '2': ReLUActivation,
+    '3': LeakyReLUActivation
+}
+
+ACTIVATION_FUNCTION_DERIVATIVES = \
+{
+    LinearActivation: LinearPrime,
+    ReLUActivation: ReLUPrime,
+    LeakyReLUActivation: LeakyReLUPrime
+}
+
+def ModifyAll(array : np.array, func):
+    lowestLevel = array.ndim == 1
+    if (lowestLevel):
+        for i in range(len(array)):
+            array[i] = func(array[i])
+    else:
+        for nextLevel in array:
+            ModifyAll(nextLevel, func)
+
