@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import pandas as pd
+import random
 
 def L1LossFunction(target : float, output : float):
     return math.abs(target-output)
@@ -67,4 +68,30 @@ def ModifyAll(array : np.array, func):
     else:
         for nextLevel in array:
             ModifyAll(nextLevel, func)
+
+"""
+@return trainingSet, validationSet, testSetIndices|none
+"""
+def SplitUpDataset(numberOfOptions : int, trainingSetPortion : float, testSetPortion : float = 0):
+    trainingSet = []
+    validationSet = []
+    testSet = []
+    trainingPicksRemaining = numberOfOptions * trainingSetPortion
+    testPicksRemaining = numberOfOptions * testSetPortion
+    totalPicksRemaining = numberOfOptions - 1
+    while totalPicksRemaining >= 0:
+        if (random.random() <= trainingPicksRemaining / totalPicksRemaining):
+            trainingSet.append(totalPicksRemaining)
+            trainingPicksRemaining -= 1
+        elif (random.random() < testPicksRemaining / totalPicksRemaining):
+            testSet.append(totalPicksRemaining)
+            testPicksRemaining -= 1
+        else:
+            validationSet.append(totalPicksRemaining)
+
+        totalPicksRemaining -= 1
+    if (testSetPortion > 0):
+        return (trainingSet, validationSet, testSet)
+    else:
+        return (trainingSet, validationSet)
 

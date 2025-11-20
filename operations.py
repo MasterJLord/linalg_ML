@@ -1,5 +1,7 @@
 from fileManipulations import *
 
+def createModel(numInputs : int, neuronsPerLayer : list, activationFunctions : list):
+    pass
 
 def forwardPropagation(inputs : np.array, activationFunctions: np.array, weights : np.array, biases : np.array):
     lastStepOutputs = inputs
