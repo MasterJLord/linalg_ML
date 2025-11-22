@@ -30,7 +30,7 @@ def loadData(fileName : str, labelHeader : str = None):
     
     
 
-def storeNeuralNetwork(fileName : str, neuronWeights : np.array, neuronBiases : np.array, activationFunctions : np.array):
+def storeNeuralNetwork(fileName : str, neuronWeights : np.array, activationFunctions : np.array):
     writer = csv.writer(open(fileName, 'w', newline=''))
     activationFunctionKeys = []
     for layer in activationFunctions:
@@ -44,7 +44,7 @@ def storeNeuralNetwork(fileName : str, neuronWeights : np.array, neuronBiases : 
     writer.writerow(activationFunctionKeys)
     for layer in neuronWeights:
         writer.writerows(layer)
-    writer.writerow(neuronBiases)
+    
 
 """
 @Return: (activation functions, weights, biases)
@@ -59,27 +59,13 @@ def loadNeuralNet(fileName : str):
             weights.append([])
             activationFunctions.append([])
         elif (key == END_NET_CODE):
-            biases = next(reader)
-            biases = splitUpBiases(biases, activationFunctionKeys)
-            return (lostOfListsToListOfArrays(activationFunctions), lostOfListsToListOfArrays(weights), lostOfListsToListOfArrays(biases))
+            return (listOfListsToListOfArrays(activationFunctions), listOfListsToListOfArrays(weights))
         else:
             activationFunctions[len(activationFunctions)-1].append(ACTIVATION_FUNCTION_CODES[key])
             weights[len(weights)-1].append(next(reader))
 
 
-def splitUpBiases(biases : list, splittingInformation : list):
-    outputBiases = []
-    bias = iter(biases)
-    for instruction in splittingInformation:
-        if (instruction == NEW_LAYER_CODE):
-            outputBiases.append([])
-        elif (instruction == END_NET_CODE):
-            return outputBiases
-        else:
-            outputBiases[len(outputBiases) - 1].append(next(bias))
-
-
-def lostOfListsToListOfArrays(inputList : list, dtype=None):
+def listOfListsToListOfArrays(inputList : list, dtype=None):
     outputList = []
     for oneList in inputList:
         outputList.append(np.array(oneList, dtype=dtype))
