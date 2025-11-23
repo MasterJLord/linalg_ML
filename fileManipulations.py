@@ -23,10 +23,10 @@ def loadData(fileName : str, labelHeader : str = None):
             loadedLabels.append(row.pop(labelIndex))
         loadedData.append(row)
     labelsArray = np.array(loadedLabels, dtype=float)
-    dataDict = pd.DataFrame(
-        columns=header,
-        data=np.array(loadedData, dtype=float))
-    return (dataDict, labelsArray)
+    # dataDict = pd.DataFrame(
+    #     columns=header,
+    #     data=np.array(loadedData, dtype=float))
+    return (np.array(loadedData, dtype=float), labelsArray)
     
     
 
@@ -47,7 +47,7 @@ def storeNeuralNetwork(fileName : str, neuronWeights : np.array, activationFunct
     
 
 """
-@Return: (activation functions, weights, biases)
+@Return: (activation functions, weights)
 """
 def loadNeuralNet(fileName : str):
     reader = csv.reader(open(fileName, 'r', newline=''))
@@ -59,15 +59,15 @@ def loadNeuralNet(fileName : str):
             weights.append([])
             activationFunctions.append([])
         elif (key == END_NET_CODE):
-            return (listOfListsToListOfArrays(activationFunctions), listOfListsToListOfArrays(weights))
+            return (listOfListsToListOfArrays(activationFunctions, None), listOfListsToListOfArrays(weights, float))
         else:
             activationFunctions[len(activationFunctions)-1].append(ACTIVATION_FUNCTION_CODES[key])
             weights[len(weights)-1].append(next(reader))
 
 
-def listOfListsToListOfArrays(inputList : list, dtype=None):
+def listOfListsToListOfArrays(inputList : list, dType=None):
     outputList = []
     for oneList in inputList:
-        outputList.append(np.array(oneList, dtype=dtype))
+        outputList.append(np.array(oneList, dtype=dType))
     return outputList
 
