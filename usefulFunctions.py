@@ -16,10 +16,7 @@ def LinearPrime(input : float):
     return 1
 
 def ReLUActivation(input : float):
-    if (input >= 0):
-        return input
-    else:
-        return 0
+    return max(input, 0)
     
 def ReLUPrime(input : float):
     if (input >= 0):
@@ -95,3 +92,32 @@ def SplitUpDataset(numberOfOptions : int, trainingSetPortion : float, testSetPor
     else:
         return (trainingSet, validationSet)
 
+
+def createTestData(rows : int, eMax : float = 3, varianceMult : float = 0.1, varianceAdd : float = 1) -> np.array:
+    xyzLabel = np.random.random((rows, 4))
+    for i in xyzLabel:
+        i *= eMax
+        i[0] = math.exp(i[0])
+        i[1] = math.exp(i[1])
+        i[2] = math.exp(i[2])
+        # Calculates f(x,y,z)
+        i[3] = max(0, i[0]-1) + \
+            max(0, i[1]-2)/2 + \
+            max(0, i[2]-3)/3
+        
+    if (varianceAdd > 0):
+        addModifier = np.random.random((rows, 4))
+        addModifier -= 0.5
+        addModifier *= (varianceAdd * 2)
+    else:
+        addModifier = 0
+    
+    if (varianceMult > 0):
+        multModifier = np.random.random((rows, 4))
+        multModifier *= varianceMult
+        multModifier += 1
+    else:
+        multModifier = np.ones((rows, 4))
+
+    return addModifier + (xyzLabel * multModifier)
+    
