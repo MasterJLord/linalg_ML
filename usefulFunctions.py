@@ -4,10 +4,16 @@ import pandas as pd
 import random
 
 def L1LossFunction(target : float, output : float):
-    return math.abs(target-output)
+    return abs(target-output)
+
+def L1LossPrime(target : float, output : float):
+    return 1 if output > target else -1
 
 def L2LossFunction(target : float, output : float):
     return (target - output)**2
+
+def L2LossPrime(target : float, output : float):
+    return 2*output-2*target
 
 def LinearActivation(input : float):
     return input
@@ -50,11 +56,13 @@ ACTIVATION_FUNCTION_CODES = \
     '3': LeakyReLUActivation
 }
 
-ACTIVATION_FUNCTION_DERIVATIVES = \
+FUNCTION_DERIVATIVES = \
 {
     LinearActivation: LinearPrime,
     ReLUActivation: ReLUPrime,
-    LeakyReLUActivation: LeakyReLUPrime
+    LeakyReLUActivation: LeakyReLUPrime,
+    L1LossFunction: L1LossPrime,
+    L2LossFunction: L2LossPrime
 }
 
 def ModifyAll(array : np.array, func):
@@ -76,7 +84,7 @@ def SplitUpDataset(numberOfOptions : int, trainingSetPortion : float, testSetPor
     trainingPicksRemaining = numberOfOptions * trainingSetPortion
     testPicksRemaining = numberOfOptions * testSetPortion
     totalPicksRemaining = numberOfOptions - 1
-    while totalPicksRemaining >= 0:
+    while totalPicksRemaining > 0:
         if (random.random() <= trainingPicksRemaining / totalPicksRemaining):
             trainingSet.append(totalPicksRemaining)
             trainingPicksRemaining -= 1
