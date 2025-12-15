@@ -7,6 +7,7 @@ import time
 
 loss = math.inf
 LOSS_FUNCTION = L2LossFunction
+LEARNING_RATE = 0.00000075
 TRAINING_COMPLETE_THRESHOLD = 1
 MAX_EPOCHS = 1000
 
@@ -14,17 +15,19 @@ epochsElapsed = 0
 startTime = time.perf_counter()
 
 while loss > TRAINING_COMPLETE_THRESHOLD and epochsElapsed < MAX_EPOCHS:
-    epochsElapsed += 1
     random.shuffle(trainingSet)
     for i in trainingSet:
-        BackPropagation(features[i], labels[i], activationFunctions, weights, 0.000001, LOSS_FUNCTION)
+        BackPropagation(features[i], labels[i], activationFunctions, weights, LEARNING_RATE, LOSS_FUNCTION)
     
-    loss = 0
-    for i in validationSet:
-        predictedValue = ForwardPropagation(features[i], activationFunctions, weights)
-        loss += LOSS_FUNCTION(labels[i], predictedValue)
-    loss /= len(validationSet)
-    print(loss)
+    if (epochsElapsed%10 == 0):
+        loss = 0
+        for i in validationSet:
+            predictedValue = ForwardPropagation(features[i], activationFunctions, weights)
+            loss += LOSS_FUNCTION(labels[i], predictedValue)
+        loss /= len(validationSet)
+        print(loss)
+
+    epochsElapsed += 1
 
 
 endTime = time.perf_counter()

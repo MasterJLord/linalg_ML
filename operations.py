@@ -24,7 +24,6 @@ def ForwardPropagation(inputs : np.array, activationFunctions: np.array, weights
 def BackPropagation(inputs : np.array, label : float, activationFunctions : np.array, weights : np.array, learningRate : float, lossFunction = L2LossFunction):
     allOutputs = ForwardPropagation(inputs, activationFunctions, weights, True)
     outputLosses = []
-    ultimateLoss = lossFunction(label, activationFunctions[len(activationFunctions) - 1][0](allOutputs[len(allOutputs)-1][0]))
     # Find derivative of loss with respect to overall output
     activationFunc = activationFunctions[len(activationFunctions) - 1][0]
     activationFuncDerivative = FUNCTION_DERIVATIVES[activationFunc]
