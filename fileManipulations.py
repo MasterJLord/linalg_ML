@@ -8,7 +8,7 @@ END_NET_CODE = '-2'
 """
 @return (features, labels)
 """
-def loadData(fileName : str, labelHeader : str = None):
+def LoadData(fileName : str, labelHeader : str = None):
     reader = csv.reader(open(fileName, 'r', newline=''))
     header = next(reader)
     try:
@@ -30,7 +30,7 @@ def loadData(fileName : str, labelHeader : str = None):
     
     
 
-def storeNeuralNetwork(fileName : str, neuronWeights : np.array, activationFunctions : np.array):
+def StoreNeuralNetwork(fileName : str, neuronWeights : np.array, activationFunctions : np.array) -> None:
     writer = csv.writer(open(fileName, 'w', newline=''))
     activationFunctionKeys = []
     for layer in activationFunctions:
@@ -49,9 +49,34 @@ def storeNeuralNetwork(fileName : str, neuronWeights : np.array, activationFunct
 """
 @Return: (activation functions, weights)
 """
-def loadNeuralNet(fileName : str):
+def LoadNeuralNet(fileName : str, hasWeights : bool = True):
     reader = csv.reader(open(fileName, 'r', newline=''))
     activationFunctionKeys = next(reader)
+    if hasWeights:
+        return loadNeuralNetWeights(reader, activationFunctionKeys)
+    else:
+        numFeatures = int(next(reader)[0])
+        return createNeuralNetWeights(activationFunctionKeys, numFeatures)
+
+
+def createNeuralNetWeights(activationFunctionKeys : list, numFeatures : int):
+    activationFunctions = []
+    weights = []
+    for key in activationFunctionKeys:
+        if (key == NEW_LAYER_CODE):
+            activationFunctions.append([])
+        elif (key == END_NET_CODE):
+            break
+        else:
+            activationFunctions[len(activationFunctions)-1].append(ACTIVATION_FUNCTION_CODES[key])
+    weights.append(np.random.random((len(activationFunctions[0]), numFeatures + 1))*10)
+    for i in range(1, len(activationFunctions)):
+        weights.append(np.random.random((len(activationFunctions[i]), len(activationFunctions[i-1]) + 1))*10)
+    return (listOfListsToListOfArrays(activationFunctions, None), weights)
+
+
+
+def loadNeuralNetWeights(reader : csv.reader, activationFunctionKeys : list):
     activationFunctions = []
     weights = []
     for key in activationFunctionKeys:
@@ -59,10 +84,11 @@ def loadNeuralNet(fileName : str):
             weights.append([])
             activationFunctions.append([])
         elif (key == END_NET_CODE):
-            return (listOfListsToListOfArrays(activationFunctions, None), listOfListsToListOfArrays(weights, float))
+            break
         else:
             activationFunctions[len(activationFunctions)-1].append(ACTIVATION_FUNCTION_CODES[key])
             weights[len(weights)-1].append(next(reader))
+    return (listOfListsToListOfArrays(activationFunctions, None), listOfListsToListOfArrays(weights, float))
 
 
 def listOfListsToListOfArrays(inputList : list, dType=None):

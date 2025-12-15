@@ -1,9 +1,5 @@
 from fileManipulations import *
 
-def CreateModel(numInputs : int, neuronsPerLayer : list, activationFunctions : list):
-    pass # might not get around to making this and just stick to the testNet for now
-    # Probably will if I want to make a larger neural network than the one I'm currently working with, which I almost certainly will
-
 def ForwardPropagation(inputs : np.array, activationFunctions: np.array, weights : np.array, verbose : bool = False):
     if (verbose):
         intermediateSteps = []

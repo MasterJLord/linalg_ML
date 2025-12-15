@@ -1,16 +1,11 @@
-from operations import *
+from config import *
 import time
 
-(features, labels) = loadData("testData.csv", "label")
-(activationFunctions, weights) = loadNeuralNet("testNet.csv")
+(features, labels) = LoadData(TRAINING_DATA_FILE, TRAINING_DATA_LABEL)
+(activationFunctions, weights) = LoadNeuralNet(NEURAL_NETWORK_FILE, PRETRAINED_NEURAL_NETWORK)
 (trainingSet, validationSet, testSet) = SplitUpDataset(len(labels), 0.8, 0.1)
 
 loss = math.inf
-LOSS_FUNCTION = L2LossFunction
-LEARNING_RATE = 0.00000075
-TRAINING_COMPLETE_THRESHOLD = 1
-MAX_EPOCHS = 1000
-
 epochsElapsed = 0
 startTime = time.perf_counter()
 
@@ -39,3 +34,5 @@ loss /= len(testSet)
 print("Test Set Loss: " + str(loss))
 print("Epochs elapsed: " + str(epochsElapsed))
 print("Time taken: " + str(endTime - startTime) + " seconds")
+
+StoreNeuralNetwork(SAVE_TO_FILE, weights, activationFunctions)

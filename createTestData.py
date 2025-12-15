@@ -7,6 +7,4 @@ def makeDataFile(fileName : str, labels : list, *testDataParameters, **testDataK
     writer.writerow(labels)
     writer.writerows(testData)
 
-# makeDataFile("testData.csv", ("x", "y", "z", "label"), 500, varianceMult=0, varianceAdd=0)
-
-makeDataFile("testData.csv", ("x", "y", "z", "label"), 500)
+makeDataFile("testData.csv", ("x", "y", "z", "label"), 500, varianceMult=0.1, varianceAdd=0.5)
