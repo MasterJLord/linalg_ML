@@ -35,4 +35,5 @@ print("Test Set Loss: " + str(loss))
 print("Epochs elapsed: " + str(epochsElapsed))
 print("Time taken: " + str(endTime - startTime) + " seconds")
 
-StoreNeuralNetwork(SAVE_TO_FILE, weights, activationFunctions)
+if (not np.isnan(loss)):
+    StoreNeuralNetwork(SAVE_TO_FILE, weights, activationFunctions)
